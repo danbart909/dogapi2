@@ -1,12 +1,3 @@
-function listen() {
-  $(".breed").change(function() {
-    let selectedDog = $(".breed").val();
-    let dogURL = selectedDog.replace(/\s/g, "");
-    $('.breed[value]').replaceWith(dogURL);
-    console.log(dogURL);
-  })
-}
-
 function watchForm() {
   $('form').submit(event => {
     event.preventDefault();
@@ -15,39 +6,29 @@ function watchForm() {
 }                
 
 function getDogImage() {
-  let selectedDog = $(".breed").val();
-  let dogURL = selectedDog.replace(/\s/g, "");
+  let rawString = $(".breed").val();
+  let dogURL = rawString.split(" ").reverse().join("/");
+  console.log(dogURL);
   fetch(`https://dog.ceo/api/breed/${dogURL}/images/random`)
-    .then(response => response.json())
+        .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
+    })
     .then(responseJson => 
       displayResults(responseJson))
-    .catch(error => alert('Something went wrong. Try again later.'));
+    .catch(error => alert('Something went wrong. Make sure your breed is spelled correctly.'));
 }
 
 function displayResults(responseJson) {
   console.log(responseJson);
-  //replace the existing image with the new one
   $('.results-img').replaceWith(
     `<img src="${responseJson.message}" class="results-img">`
   )
-  //display the results section
   $('.results').removeClass('hidden');
 }
 
 $(function() {
-  console.log('App loaded! Waiting for submit!');
-  listen();
   watchForm();
 });
-
-//$(function () {
-//  $('#number').change(function()
-//    $('#number').attr('value', number);
-// )});
-
-// $(function() {
-//   $('form').submit(function () {
-// //    $('#number').attr('value', number);
-//     console.log(number);
-//   });
-// });
