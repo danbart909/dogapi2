@@ -1,12 +1,9 @@
 function listen() {
   $(".breed").change(function() {
-//    let breed = $('.breed').val();
-//    let breedURL = breed.replace(/""/g,'-');
-    let selectedDog = $(".breed :selected").val();
+    let selectedDog = $(".breed").val();
     let dogURL = selectedDog.replace(/\s/g, "");
-    let x = $('.breed :selected').value;
     $('.breed[value]').replaceWith(dogURL);
-    alert(dogURL);
+    console.log(dogURL);
   })
 }
 
@@ -14,14 +11,12 @@ function watchForm() {
   $('form').submit(event => {
     event.preventDefault();
     getDogImage();
-    console.log(breed);
   });
 }                
 
 function getDogImage() {
-  let selectedDog = $(".breed :selected").val();
+  let selectedDog = $(".breed").val();
   let dogURL = selectedDog.replace(/\s/g, "");
-  let x = $('.breed :selected').value;
   fetch(`https://dog.ceo/api/breed/${dogURL}/images/random`)
     .then(response => response.json())
     .then(responseJson => 
